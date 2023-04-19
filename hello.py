@@ -3,32 +3,27 @@ import os, psycopg2
 app = Flask(__name__)
 app.secret_key = "Vinay"
 
-# conn = psycopg2.connect(
-#    host="localhost",
-#    database="flaskdb",
-#    user="postgres",
-#    password="postgres"
-# )
-
 conn = psycopg2.connect(
-    'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
+   host="localhost",
+   database="abcd",
+   user="postgres",
+   password="postgres"
 )
+
+# -----------------------debug-----------------------
+# conn = psycopg2.connect(
+#     'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
+# )
 
 cur = conn.cursor()
 
-cur.execute("select * from login")
-rows = cur.fetchall()
-print(rows)
+# -----------------------debug-----------------------
+# cur.execute("select * from login")
+# rows = cur.fetchall()
+# print(rows)
 
 @app.route('/')
 def index():
-   # if 'username' in session:
-   #    username = session['username']
-   #    return 'Logged in as ' + username + '<br>' + \
-   #       "<b><a href = '/logout'>click here to log out</a></b>"
-   # return "You are not logged in <br><a href = '/login'></b>" + \
-   #    "click here to log in</b></a>"
-
    islogged = 0
    uname = "username_when_no_user"
    if 'username' in session:
@@ -45,14 +40,18 @@ def login():
       session['username'] = request.form['username']
       session['password'] = request.form['password']
 
-      # cur.execute("select * from checklogin('{}', '{}')".format(session['username'], session['password']))
-      # status = cur.fetchall()
-      # print(status)
-      if session['username'] == 'admin' and session['password'] == 'admin':
+      cur.execute("select * from checklogin('{}', '{}')".format(session['username'], session['password']))
+      status = cur.fetchone()
+      
+      if status[0] == 0:
          flash("You were successfully logged in!")
          return redirect(url_for('index'))
+      elif status[0] == 1:
+         error = "incorrect password for the username"
+      elif status[0] == 2:
+         error = "username does not exist"
       else:
-         error = "invalid username or password"
+         error = "unknown error"
 
    return render_template('login.html', error = error)
 
@@ -70,6 +69,14 @@ def signup():
       return redirect(url_for('login'))
    return render_template('signup.html')
 
+@app.route('/schedule', methods = ['GET', 'POST'])
+def schedule():
+   schedule = []
+   train_no = None
+   if request.method == 'POST':
+      cur.execute("select * from train_schedule({})".format(request.form['train_no']))
+      schedule = cur.fetchall()
+   return render_template('schedule.html', train_no = train_no, route = schedule)
 
 if __name__ == '__main__':
    app.run(debug=True)

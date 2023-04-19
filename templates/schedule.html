@@ -1,0 +1,32 @@
+{% extends "base.html" %} 
+
+{% block content %} 
+
+<form action="/schedule" method="post">
+    <input type="number" name="train_no" id=""/>
+    <input type="submit" value="">
+</form>
+
+{{ train_no }}
+<table>
+    <tr>
+        <th>Station Position</th>
+        <th>Day</th>
+        <th>Station ID</th>
+        <th>Station Name</th>
+        <th>Departure Time</th>
+        <th>Arrival Time</th>
+    </tr>
+    {% for stop in route %}
+    <tr>
+        <td>{{ stop[0] }}</td>
+        <td>{{ stop[1] }}</td>
+        <td>{{ stop[2] }}</td>
+        <td>{{ stop[3] }}</td>
+        <td>{{ stop[4] }}</td>
+        <td>{{ stop[5] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}
