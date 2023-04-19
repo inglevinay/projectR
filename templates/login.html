@@ -7,6 +7,19 @@
     <title>Document</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% if error %}
+         <p><strong>Error:</strong> {{ error }}
+    {% endif %}
     <form action="" method="post">
         <label for="username">Username</label>
         <input type="text" name="username" id="username">

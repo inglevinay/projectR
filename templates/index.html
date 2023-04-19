@@ -1,9 +1,26 @@
-<html>
-   <body>
-      <form action = "/setcookie" method = "POST">
-         <p><h3>Enter userID</h3></p>
-         <p><input type = 'text' name = 'nm'/></p>
-         <p><input type = 'submit' value = 'Login'/></p>
-      </form>
-   </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %} 
+
+   {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+            {% for message in messages %}
+            <li> {{ message }}</li>
+            {% endfor %}
+      </ul>
+      {% endif %}
+   {% endwith %}
+
+   {% if islogged == 0%}
+      <p>You are not logged in</p>
+      <a href="/login">Click here to login</a>
+      <a href="/signup">Or create a new account!</a>
+   {% else %}
+      <p>You are logged in as {{ username }}</p>
+      <a href="/logout">Click here to logout</a>
+   {% endif %}
+
+  
+
+{% endblock content %}
