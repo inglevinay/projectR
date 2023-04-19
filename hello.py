@@ -10,11 +10,15 @@ app.secret_key = "Vinay"
 #    password="postgres"
 # )
 
-# cur = conn.cursor()
+conn = psycopg2.connect(
+    'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
+)
 
-# cur.execute("select * from login")
-# rows = cur.fetchall()
-# print(rows)
+cur = conn.cursor()
+
+cur.execute("select * from login")
+rows = cur.fetchall()
+print(rows)
 
 @app.route('/')
 def index():
