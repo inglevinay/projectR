@@ -37,16 +37,17 @@ def login():
       print(status)
 
       return redirect(url_for('index'))
-   return '''
+   # return '''
 	
-   <form action = "" method = "post">
-      <p><input type = text name = username></p>
-      <p><input type = password name = password></p>
-      <p><input type = submit value = Login/></p>
+   # <form action = "" method = "post">
+   #    <p><input type = text name = username></p>
+   #    <p><input type = password name = password></p>
+   #    <p><input type = submit value = Login/></p>
 
-   </form>
+   # </form>
 	
-   '''
+   # '''
+   return render_template('login.html')
 
 @app.route('/logout')
 def logout():
