@@ -65,8 +65,17 @@ def logout():
 def signup():
    if request.method == 'POST':
       print(request.form['username'], request.form['name'])
-      flash('New account generation was successful!')
+
+      try:
+         cur.execute("insert into login values('{}', '{}')".format(request.form['username'], request.form['password']))
+         
+         # to persiste the changes
+         conn.commit()
+         flash('New account generation was successful!')
+      except:
+         flash("Account creation failed. Try again!")
       return redirect(url_for('login'))
+   
    return render_template('signup.html')
 
 @app.route('/schedule', methods = ['GET', 'POST'])
