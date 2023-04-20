@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, make_response, session, redirect, url_for, flash
+from dotenv import dotenv_values
 import os, psycopg2
 app = Flask(__name__)
 app.secret_key = "Vinay"
+
+config = dotenv_values(".env")      # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
 conn = psycopg2.connect(
    host="localhost",
