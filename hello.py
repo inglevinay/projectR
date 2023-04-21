@@ -25,14 +25,23 @@ cur = conn.cursor()
 # rows = cur.fetchall()
 # print(rows)
 
-@app.route('/')
-def index():
-   islogged = 0
-   uname = "username_when_no_user"
+islogged = 0
+uname = "username_when_no_user"
+def updateLoginStatus():
+   global islogged, uname
    if 'username' in session:
       uname = session['username']
       islogged = 1
+   else:
+      islogged = 0
 
+
+@app.route('/')
+def index():
+   updateLoginStatus()
+   print(islogged)
+   # if request.method == 'POST':
+      
    return render_template("index.html", username = uname, islogged = islogged)
 
 
@@ -56,13 +65,16 @@ def login():
       else:
          error = "unknown error"
 
-   return render_template('login.html', error = error)
+   return render_template('login.html', error = error, islogged = islogged)
+
 
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
+   updateLoginStatus()
    return redirect(url_for('index'))
+
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
@@ -77,9 +89,11 @@ def signup():
          flash('New account generation was successful!')
       except:
          flash("Account creation failed. Try again!")
+         
       return redirect(url_for('login'))
    
-   return render_template('signup.html')
+   return render_template('signup.html',  islogged = islogged)
+
 
 @app.route('/schedule', methods = ['GET', 'POST'])
 def schedule():
@@ -88,7 +102,8 @@ def schedule():
    if request.method == 'POST':
       cur.execute("select * from train_schedule({})".format(request.form['train_no']))
       schedule = cur.fetchall()
-   return render_template('schedule.html', train_no = train_no, route = schedule)
+   return render_template('schedule.html', train_no = train_no, route = schedule , islogged = islogged)
+
 
 if __name__ == '__main__':
    app.run(debug=True)

@@ -12,15 +12,12 @@
       {% endif %}
    {% endwith %}
 
-   {% if islogged == 0%}
-      <p>You are not logged in</p>
-      <a href="/login">Click here to login</a>
-      <a href="/signup">Or create a new account!</a>
-   {% else %}
-      <p>You are logged in as {{ username }}</p>
-      <a href="/logout">Click here to logout</a>
-   {% endif %}
+   
 
    <a href="/schedule">View train schedule</a>
+
+   <!-- <form action="/index" method="post">
+      input:
+   </form> -->
 
 {% endblock content %}

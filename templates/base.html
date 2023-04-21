@@ -8,6 +8,15 @@
 </head>
 
 <body style="background-color: red;">
+    {% if islogged == 0%}
+      <p>You are not logged in</p>
+      <a href="/login">Click here to login</a>
+      <a href="/signup">Or create a new account!</a>
+   {% else %}
+      <p>You are logged in as {{ session['username'] }}</p>
+      <a href="/logout">Click here to logout</a>
+   {% endif %}
+   
     {% block content %} 
     <h1>This is a placeholder, if you see this, there's some error</h1>
     {% endblock content %}   
