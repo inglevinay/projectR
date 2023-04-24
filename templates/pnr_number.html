@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main_block">
+
+    <div class="middle_block">
+        <div class="main_heading">
+            PNR<br>
+            FOR TICKET DETAILS
+        </div>
+
+        <div class="main_entry">
+            <form action="/pnr_number" method="post">
+                <div class="main_username">
+                    PNR Number <br>
+                    <input type="number" name="pnr_number" id=""/>
+                </div>
+                <div class="main_button">
+                    <input class="main_select_button" type="submit" value="Submit">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}
