@@ -1,7 +1,7 @@
 body{
     /* background-color: brown; */
     /* background-image: url("images/secret/char4.jpg"); */
-    background: linear-gradient(0deg,rgba(0,0,0,.0) 0,transparent 45%,transparent 45%,rgba(0,0,0,.5)), url("images/secret/char4.jpg") no-repeat;
+    background: linear-gradient(0deg,rgba(0,0,0,.0) 0,transparent 45%,transparent 45%,rgba(0,0,0,.5)), url("images/secret/char44.jpg") no-repeat;
     background-size: cover;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
