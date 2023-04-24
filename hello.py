@@ -6,17 +6,17 @@ app.secret_key = "Vinay"
 
 config = dotenv_values(".env")      # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
-conn = psycopg2.connect(
-   host="localhost",
-   database="abcd",
-   user="postgres",
-   password="postgres"
-)
+# conn = psycopg2.connect(
+#    host="localhost",
+#    database="abcd",
+#    user="postgres",
+#    password="postgres"
+# )
 
 # -----------------------debug-----------------------
-# conn = psycopg2.connect(
-#     'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
-# )
+conn = psycopg2.connect(
+    'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
+)
 
 cur = conn.cursor()
 
@@ -94,6 +94,16 @@ def signup():
    
    return render_template('signup.html',  islogged = islogged)
 
+
+@app.route('/pnr_number', methods = ['GET', 'POST'])
+def pnr_number():
+   pnr_number = []
+   if request.method == 'POST':
+      cur.execute("select train_id, seat_no, src_station, dest_station \
+                  from reserves inner join ticket using (ticket_id) \
+                  inner join seat using (seat_id) where reserves.pnr = {}".format(request.form['pnr_number']))
+      pnr_number = cur.fetchall()
+   return render_template('pnr_number.html', islogged = islogged, pnr_number = pnr_number)
 
 @app.route('/schedule', methods = ['GET', 'POST'])
 def schedule():
