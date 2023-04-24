@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %} 
+
+   {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+            {% for message in messages %}
+            <li> {{ message }}</li>
+            {% endfor %}
+      </ul>
+      {% endif %}
+   {% endwith %}
+   
+<form action="/trains" method="post">
+    <input type="text" name="source">
+    <input type="text" name="destination">
+    <input type="date" name="date">
+    <input type="text" name="class">
+    <input type="submit" value="Submit">
+</form>
+
+<table>
+    <tr>
+        <th>Train Number</th>
+        <th>Source</th>
+        <th>Destination</th>
+        <th>Departure Time</th>
+        <th>Arrival Time</th>
+        <th>Fare</th>
+        <th>Available Seats</th>
+    </tr>
+{% for train in trains %} 
+    <tr>
+        <td>{{ train[0] }}</td>
+        <td>{{ train[1] }}</td>
+        <td>{{ train[2] }}</td>
+        <td>{{ train[3] }}</td>
+        <td>{{ train[4] }}</td>
+        <td>{{ train[5] }}</td>
+        <td>{{ train[6] }}</td>
+    </tr>
+{% endfor %} 
+</table>
+{% endblock content %}

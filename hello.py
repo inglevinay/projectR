@@ -36,12 +36,14 @@ def updateLoginStatus():
       islogged = 0
 
 
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 def index():
    updateLoginStatus()
+
    print(islogged)
    # if request.method == 'POST':
-      
+   #    print(request.form["source"], request.form["destination"], request.form["date"], request.form["class"])
+   #    return redirect(url_for("trains"))
    return render_template("index.html", username = uname, islogged = islogged)
 
 
@@ -100,10 +102,28 @@ def schedule():
    schedule = []
    train_no = None
    if request.method == 'POST':
-      cur.execute("select * from train_schedule({})".format(request.form['train_no']))
-      schedule = cur.fetchall()
+      try:
+         cur.execute("select * from train_schedule({})".format(request.form['train_no']))
+         train_no = request.form['train_no']
+         schedule = cur.fetchall()
+      except Exception as err:
+         print(err)
+         flash("Something went wrong, maybe your input!")
+         return redirect(url_for('index'))
    return render_template('schedule.html', train_no = train_no, route = schedule , islogged = islogged)
 
+@app.route('/trains', methods = ['GET', 'POST'])
+def trains():
+   trains = []
+   if request.method == 'POST':
+      try:
+         cur.execute("select * from availableRoute('{}', '{}', '{}', '{}')".format( request.form['date'], request.form['source'], request.form['destination'],request.form['class']))
+         trains = cur.fetchall()
+         for train in trains:
+            print(train)
+      except Exception as err:
+         flash("Something went wrong, maybe your input!")
+   return render_template('trains.html', trains = trains, islogged = islogged)
 
 if __name__ == '__main__':
    app.run(debug=True)

@@ -13,7 +13,7 @@
    {% endwith %}
    
    <div class="main_block">
-
+        <form action="/trains" method="post">
       <div class="middle_block">
          <div class="main_heading">
              DISCOVER YOUR <br>
@@ -23,31 +23,29 @@
          <div class="main_entry">
              <div class="main_username">
                  Boarding Station <br>
-                 <input type="text">
+                 <input type="text" name="source">
              </div>
              <div class="main_username">
                  Destination Station <br>
-                 <input type="text">
+                 <input type="text" name="destination">
              </div>
              <div class="main_date">
                  Date <br>
-                 <input type="date">
+                 <input type="date" name="date">
              </div>
              <div class="main_username">
                  Class <br>
-                 <input type="text">
+                 <input type="text" name="class">
              </div>
              <div class="main_button">
                  <br>
-                 <a class="main_select_button" href="https://www.google.com/">
-                     Submit
-                 </a>
+                 <input class="main_select_button" type="submit" value="Submit">
              </div>
          </div>
      </div>
 
-
-   </div>
+        </form>
+    </div>
 
    <!-- <form action="/index" method="post">
       input:
