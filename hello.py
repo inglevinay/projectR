@@ -6,17 +6,17 @@ app.secret_key = "Vinay"
 
 config = dotenv_values(".env")      # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
-# conn = psycopg2.connect(
-#    host="localhost",
-#    database="abcd",
-#    user="postgres",
-#    password="postgres"
-# )
+conn = psycopg2.connect(
+   host="dpg-cg2nid64dada1e24utb0-a.singapore-postgres.render.com",
+   database="reservation_uso3",
+   user="vinay2",
+   password="OHnBXFeXQPfqTCsYwST62gNsqisSTnB6"
+)
 
 # -----------------------debug-----------------------
-conn = psycopg2.connect(
-    'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
-)
+# conn = psycopg2.connect(
+#     'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
+# )
 
 cur = conn.cursor()
 
