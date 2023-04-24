@@ -1,6 +1,8 @@
+
 {% extends "base.html" %} 
 
 {% block content %} 
+
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -15,7 +17,7 @@
     {% if error %}
          <p><strong>Error:</strong> {{ error }}
     {% endif %}
-    
+
     <div class="main_block">
         <div class="middle_block">
             <div class="main_heading">
@@ -46,5 +48,4 @@
             </div>
         </div>
     </div>
-
 {% endblock content %}
