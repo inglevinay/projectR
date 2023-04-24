@@ -1,12 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="" method="post">
-    <input type="text" name="username" id=""/>
-    <input type="password" name="password" id="">
-    <input type="text" name="name" id="">
-    <input type="text" name="details" id="">enter details
-    <input type="submit" value="">
-</form>
+<div class="main_block">
+    <div class="middle_block">
+        <div class="main_heading">
+            SIGNUP <br>
+            PLEASE ENTER DETAILS TO CREATE ACCOUNT
+        </div>
+
+        <div class="main_entry">
+            <form action="" method="post">
+                <div class="main_username">
+                    Username <br>
+                    <input type="text" name="username" id=""/>
+                </div>
+                <div class="main_username">
+                    Password <br>
+                    <input type="password" name="password" id="">
+                </div>
+                <div class="main_username">
+                    Name <br>
+                    <input type="text" name="name" id="">
+                </div>
+                <div class="main_username">
+                    Details <br>
+                    <input type="text" name="details" id="">
+                </div>
+                <div class="main_button">
+                    <br>
+                    <a class="main_select_button" href="https://www.google.com/">
+                        Submit
+                    </a>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
 
 {% endblock content %}

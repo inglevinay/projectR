@@ -2,31 +2,58 @@
 
 {% block content %} 
 
-<form action="/schedule" method="post">
+<!-- <form action="/schedule" method="post">
     <input type="number" name="train_no" id=""/>
     <input type="submit" value="">
-</form>
+</form> -->
+
+<div class="main_block">
+
+    <div class="middle_block">
+        <div class="main_heading">
+            VIEW ALL AVAIALBLE TRAINS<br>
+            FOR YOUR JOURNEY
+        </div>
+
+        <div class="main_entry">
+            <form action="/schedule" method="post">
+                <div class="main_username">
+                    Train Number <br>
+                    <input type="number" name="train_no" id=""/>
+                </div>
+                <div class="main_button">
+                    <input class="main_select_button" type="submit" value="Submit">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
 
 {{ train_no }}
-<table>
-    <tr>
-        <th>Station Position</th>
-        <th>Day</th>
-        <th>Station ID</th>
-        <th>Station Name</th>
-        <th>Departure Time</th>
-        <th>Arrival Time</th>
-    </tr>
-    {% for stop in route %}
-    <tr>
-        <td>{{ stop[0] }}</td>
-        <td>{{ stop[1] }}</td>
-        <td>{{ stop[2] }}</td>
-        <td>{{ stop[3] }}</td>
-        <td>{{ stop[4] }}</td>
-        <td>{{ stop[5] }}</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="main_block">
+    <div class="main_entry">
+    <table>
+        <tr>
+            <th>Station Position</th>
+            <th>Day</th>
+            <th>Station ID</th>
+            <th>Station Name</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+        </tr>
+        {% for stop in route %}
+        <tr>
+            <td>{{ stop[0] }}</td>
+            <td>{{ stop[1] }}</td>
+            <td>{{ stop[2] }}</td>
+            <td>{{ stop[3] }}</td>
+            <td>{{ stop[4] }}</td>
+            <td>{{ stop[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div></div>
 
 {% endblock content %}
