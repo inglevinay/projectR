@@ -7,10 +7,10 @@ app.secret_key = "Vinay"
 config = dotenv_values(".env")      # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
 conn = psycopg2.connect(
-   host="dpg-cg2nid64dada1e24utb0-a.singapore-postgres.render.com",
-   database="reservation_uso3",
-   user="vinay2",
-   password="OHnBXFeXQPfqTCsYwST62gNsqisSTnB6"
+   host=config["HOST"],
+   database=config["DATABASE"],
+   user=config["USER"],
+   password=config["PASSWORD"]
 )
 
 # -----------------------debug-----------------------
