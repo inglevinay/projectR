@@ -127,12 +127,32 @@ def trains():
    trains = []
    if request.method == 'POST':
       try:
+         cur.execute("select * from train_class")
+         classes = cur.fetchall()
+         print(classes)
          cur.execute("select * from availableRoute('{}', '{}', '{}', '{}')".format( request.form['date'], request.form['source'], request.form['destination'],request.form['class']))
-         trains = cur.fetchall()
-         for train in trains:
-            print(train)
+         data = cur.fetchall()
+         print(data)
+         for d in data:
+            td = [d[0], d[1], d[2], d[3], d[4], [(request.form['class'], d[5], d[6])]]
+
+            for c in classes:
+               if c[0] != request.form['class']:
+                  cur.execute("select * from calc_fare({}, '{}', '{}', '{}')".format(td[0], c[0], td[1], td[3]))
+                  fare = cur.fetchone()
+                  cur.execute("select * from countavailableseats({}, '{}', '{}', '{}', '{}')".format(td[0], request.form['date'], td[1], td[3], c[0]))
+                  seats = cur.fetchone()
+                  td[5].append((c[0], fare[0], seats[0]))
+            trains.append(td)
+
+         print(trains)
+
+         if(len(trains) == 0):
+            flash("No trains found!")
+         
       except Exception as err:
-         flash("Something went wrong, maybe your input!")
+         flash("Something went wrong, Error : ", err)
+      return render_template('trains.html', trains = trains, islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], tr_class = request.form['class'])
    return render_template('trains.html', trains = trains, islogged = islogged)
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ left join station as stn
 using (station_id)
 left join week as wk
 on (rte.day = wk.day_no)
-where train_id = 11013 order by station_position;
+where train_id = given_train_no order by station_position;
 end;
 $BODY$
 language plpgsql;

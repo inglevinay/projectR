@@ -13,10 +13,10 @@
    {% endwith %}
    
 <form action="/trains" method="post">
-    <input type="text" name="source">
-    <input type="text" name="destination">
-    <input type="date" name="date">
-    <input type="text" name="class">
+    <input type="text" name="source" value="{{source}}">
+    <input type="text" name="destination" value="{{destination}}">
+    <input type="date" name="date" value="{{date}}">
+    <input type="text" name="class" value="{{tr_class}}">
     <input type="submit" value="Submit">
 </form>
 
@@ -27,18 +27,27 @@
         <th>Destination</th>
         <th>Departure Time</th>
         <th>Arrival Time</th>
-        <th>Fare</th>
-        <th>Available Seats</th>
+        <th>Class - Fare - Seats Available</th>
+        <th>Book</th>
     </tr>
 {% for train in trains %} 
     <tr>
         <td>{{ train[0] }}</td>
         <td>{{ train[1] }}</td>
-        <td>{{ train[2] }}</td>
         <td>{{ train[3] }}</td>
+        <td>{{ train[2] }}</td>
         <td>{{ train[4] }}</td>
-        <td>{{ train[5] }}</td>
-        <td>{{ train[6] }}</td>
+        <td>
+            <select name="class_select" id="cls_sel">
+                {% for stop in train[5] %}
+                    <option value =" {{ stop }} "> {{stop[0]}} - {{stop[1]}} - {{stop[2]}}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td>
+            <input type="button" value="book now">
+        </td>
+
     </tr>
 {% endfor %} 
 </table>
