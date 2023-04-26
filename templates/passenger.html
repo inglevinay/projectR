@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %} 
+
+   {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+            {% for message in messages %}
+            <li> {{ message }}</li>
+            {% endfor %}
+      </ul>
+      {% endif %}
+   {% endwith %}
+
+   <div class="info">
+    {{class_select}}
+    {{train_no}}
+    {{source}}
+    {{destination}}
+    {{date}}
+   </div>
+
+    <button onclick="addField()">Add Passenger</button>
+    <form id="pax-form">
+        
+        <div class="pax">
+            <label for="name-1">Enter Passenger Name</label>
+            <input type="text" name="name-1" id=""/>
+            <label for="age-1">Enter Passenger Age</label>
+            <input type="number" name="age-1" id=""/>
+            <label for="sex-1">Enter Gender</label>
+            <select name="sex-1" id="">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <button type="submit" id="pax-submit">Submit</button>
+        </div>
+   </form>
+
+   
+
+
+<script>
+    function addField(){
+        // console.log("Hello")
+        // var form = document.getElementsByTagName('form')[0];
+        // var input = document.createElement('input');
+        // input.type = 'text';
+        // input.name = 'somename';
+        // // form.appendChild(input);
+        // form.insertBefore(input, "form:last-child");
+        console.log('{{max_pax}}')
+        var max_passenger = parseInt("{{max_pax}}");
+        var curr_passenger = document.getElementsByClassName('pax').length;
+        console.log(curr_passenger)
+        if(curr_passenger < max_passenger){
+            var div = document.createElement('div');
+            div.className = 'pax';
+            htmlTxt = `<label for='name-${curr_passenger+1}'>Enter Passenger Name</label>
+                        <input type='text' name='name-${curr_passenger+1}'/>
+                        <label for='age-${curr_passenger+1}'>Enter Passenger Age</label>
+                        <input type='number' name='age-${curr_passenger+1}'/>
+                        <label for='sex-${curr_passenger+1}'>Enter Gender</label>
+                        <select name='sex-${curr_passenger+1}'>
+                            <option value='Male'>Male</option>
+                            <option value='Female'>Female</option>
+                            <option value='Other'>Other</option>
+                        </select>
+                        <button type='button' onclick='this.parentNode.remove(this.parentNode)'>Remove Passenger</button>`;
+
+            div.innerHTML = htmlTxt;
+            // console.log(htmlTxt);
+            // document.getElementsByTagName('form')[0].appendChild(div);
+            document.getElementById('pax-submit').insertAdjacentElement('beforebegin', div);
+        }
+        else{
+            alert("Maximum number of passengers reached");
+        }
+    }
+</script>
+{% endblock content %}

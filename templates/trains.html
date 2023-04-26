@@ -32,22 +32,30 @@
     </tr>
 {% for train in trains %} 
     <tr>
-        <td>{{ train[0] }}</td>
-        <td>{{ train[1] }}</td>
-        <td>{{ train[3] }}</td>
-        <td>{{ train[2] }}</td>
-        <td>{{ train[4] }}</td>
-        <td>
-            <select name="class_select" id="cls_sel">
-                {% for stop in train[5] %}
-                    <option value =" {{ stop }} "> {{stop[0]}} - {{stop[1]}} - {{stop[2]}}</option>
-                {% endfor %}
-            </select>
-        </td>
-        <td>
-            <input type="button" value="book now">
-        </td>
-
+        <form action="/passenger" method="post">
+            <td>{{ train[0] }}</td>
+            <td>{{ train[1] }}</td>
+            <td>{{ train[3] }}</td>
+            <td>{{ train[2] }}</td>
+            <td>{{ train[4] }}</td>
+            <td>
+                <select name="class_select" id="cls_sel">
+                    {% for stop in train[5] %}
+                        <option name = "class" value ="{{[ stop[0], stop[1], stop[2] ] }}"> {{stop[0]}} - {{stop[1]}} - {{stop[2]}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input type="hidden" name="train_no" value="{{ train[0] }}">
+                <input type="hidden" name="source" value="{{ train[1] }}">
+                <input type="hidden" name="destination" value="{{ train[3] }}">
+                <input type="hidden" name="date" value="{{ date }}">
+                <input type="hidden" name="dep_time" value="{{ train[2] }}">
+                <input type="hidden" name="arr_time" value="{{ train[4] }}">
+                
+                <button type="submit">Book Now</button>
+            </td>
+        </form>
     </tr>
 {% endfor %} 
 </table>

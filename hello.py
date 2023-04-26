@@ -107,6 +107,7 @@ def pnr_number():
       pnr_number = cur.fetchall()
    return render_template('pnr_number.html', islogged = islogged, pnr_number = pnr_number)
 
+
 @app.route('/schedule', methods = ['GET', 'POST'])
 def schedule():
    schedule = []
@@ -121,6 +122,7 @@ def schedule():
          flash("Something went wrong, maybe your input!")
          return redirect(url_for('index'))
    return render_template('schedule.html', train_no = train_no, route = schedule , islogged = islogged)
+
 
 @app.route('/trains', methods = ['GET', 'POST'])
 def trains():
@@ -154,6 +156,18 @@ def trains():
          flash("Something went wrong, Error : ", err)
       return render_template('trains.html', trains = trains, islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], tr_class = request.form['class'])
    return render_template('trains.html', trains = trains, islogged = islogged)
+
+
+@app.route('/passenger', methods = ['GET', 'POST'])
+def passenger():
+   if request.method == 'POST':
+      print("sele", request.form)
+      sel_info = request.form['class_select'].strip('][').split(', ')
+      sel_class = sel_info[0]
+      sel_fare = sel_info[1]
+      sel_seat = sel_info[2]
+   return render_template("passenger.html", islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], class_select = sel_class, train_no = request.form['train_no'], max_pax = sel_seat)
+
 
 if __name__ == '__main__':
    app.run(debug=True)
