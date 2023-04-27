@@ -13,11 +13,11 @@
    {% endwith %}
 
    <div class="info">
-    {{class_select}}
-    {{train_no}}
-    {{source}}
-    {{destination}}
-    {{date}}
+    {{train_info['class']}}
+    {{train_info['train_no']}}
+    {{train_info['source']}}
+    {{train_info['destination']}}
+    {{train_info['date']}}
    </div>
 
     <button onclick="addField()">Add Passenger</button>
@@ -50,8 +50,8 @@
         // input.name = 'somename';
         // // form.appendChild(input);
         // form.insertBefore(input, "form:last-child");
-        console.log('{{max_pax}}')
-        var max_passenger = parseInt("{{max_pax}}");
+        console.log('{{train_info["max_pax"]}}')
+        var max_passenger = parseInt("{{train_info['max_pax']}}");
         var curr_passenger = document.getElementsByClassName('pax').length;
         console.log(curr_passenger)
         if(curr_passenger < max_passenger){

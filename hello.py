@@ -42,23 +42,33 @@ def index():
 
    print(islogged)
    # if request.method == 'POST':
-   #    print(request.form["source"], request.form["destination"], request.form["date"], request.form["class"])
-   #    return redirect(url_for("trains"))
+   #    # print(request.form["source"], request.form["destination"], request.form["date"], request.form["class"])
+   #    if 'train' in session:
+   #       return redirect(url_for("trains"))
    return render_template("index.html", username = uname, islogged = islogged)
 
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
    error = None
+   print("ses", session)
    if request.method == 'POST':
-      session['username'] = request.form['username']
-      session['password'] = request.form['password']
 
-      cur.execute("select * from checklogin('{}', '{}')".format(session['username'], session['password']))
+      cur.execute("select * from checklogin('{}', '{}')".format(request.form['username'], request.form['password']))
       status = cur.fetchone()
       
       if status[0] == 0:
+         session['username'] = request.form['username']
+         session['password'] = request.form['password']
          flash("You were successfully logged in!")
+         updateLoginStatus()
+         if 'train_info' in session:
+            cp_train_info = session['train_info']
+            print(session['train_info'])
+            session.pop('train_info', None)
+            # return render_template('trains.html', trains = cp_train_info["train_no"], islogged = islogged, source = cp_train_info["source"], destination = cp_train_info["destination"], date = cp_train_info["date"], tr_class = cp_train_info["class"])
+            return redirect(url_for('trains'))
+
          return redirect(url_for('index'))
       elif status[0] == 1:
          error = "incorrect password for the username"
@@ -166,7 +176,13 @@ def passenger():
       sel_class = sel_info[0]
       sel_fare = sel_info[1]
       sel_seat = sel_info[2]
-   return render_template("passenger.html", islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], class_select = sel_class, train_no = request.form['train_no'], max_pax = sel_seat)
+
+      train_info = {"train_no": request.form['train_no'], "date": request.form['date'], "source": request.form['source'], "destination": request.form['destination'], "class": sel_class, "fare": sel_fare, "max_pax": sel_seat}
+      if 'username' not in session:
+         flash("You need to login first!")
+         session['train_info'] = train_info
+         return redirect(url_for('login'))
+   return render_template("passenger.html", islogged = islogged, train_info = train_info)
 
 
 if __name__ == '__main__':
