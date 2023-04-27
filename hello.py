@@ -185,5 +185,11 @@ def passenger():
    return render_template("passenger.html", islogged = islogged, train_info = train_info)
 
 
+@app.route('/book', methods = ['GET', 'POST'])
+def book():
+   if request.method == 'POST':
+      booking_info = request.form
+      return render_template("book.html", islogged = islogged, booking_info = booking_info)
+
 if __name__ == '__main__':
    app.run(debug=True)
