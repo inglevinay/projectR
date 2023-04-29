@@ -172,7 +172,7 @@ def passenger():
       sel_class = sel_info[0]
       sel_fare = sel_info[1]
       sel_seat = sel_info[2]
-
+      
       train_info = {"train_no": request.form['train_no'], "date": request.form['date'], "source": request.form['source'], "destination": request.form['destination'], "class": sel_class, "fare": sel_fare, "max_pax": sel_seat}
       if 'username' not in session:
          flash("You need to login first!")
@@ -206,7 +206,7 @@ def book():
       return render_template("book.html", islogged = islogged, booking_info = booking_info)
 
 
-@app.route('/tickets', method = ['GET', 'POST'])
+@app.route('/tickets', methods = ['GET', 'POST'])
 def view_tickets():
    if request.method == 'POST':
       print("should do nothing for now")
@@ -225,6 +225,9 @@ def view_tickets():
                                  select user_id from user_table
                                  where username = '{}')));'''.format(session['username']))
          tickets = cur.fetchall()
+         print(tickets)
          return render_template("tickets.html", islogged = islogged, tickets = tickets)
+      
+
 if __name__ == '__main__':
    app.run(debug=True)

@@ -12,5 +12,22 @@
       {% endif %}
    {% endwith %}
 
-   
+    <h1>Tickets</h1>
+    <table>
+        <tr>
+            <th>Price</th>
+            <th>Source Station</th>
+            <th>Destination Station</th>
+            <th>PNR</th>
+        </tr>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ticket[1]}}</td>
+            <td>{{ticket[2]}}</td>
+            <td>{{ticket[3]}}</td>
+            <td>{{ticket[4]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+   {{tickets}}
 {% endblock content %}
