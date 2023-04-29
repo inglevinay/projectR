@@ -205,5 +205,26 @@ def book():
          flash("Something went wrong, Error : ", err)
       return render_template("book.html", islogged = islogged, booking_info = booking_info)
 
+
+@app.route('/tickets', method = ['GET', 'POST'])
+def view_tickets():
+   if request.method == 'POST':
+      print("should do nothing for now")
+      return redirect(url_for('index'))
+   else:
+      if('username' not in session):
+         flash("You need to login first!")
+         return redirect(url_for('login'))
+      else:
+         cur.execute('''select * from ticket
+                        where ticket_id in (
+                           select ticket_id from book
+                           where pass_id in (
+                              select pass_id from user_passenger
+                              where user_id in (
+                                 select user_id from user_table
+                                 where username = '{}')));'''.format(session['username']))
+         tickets = cur.fetchall()
+         return render_template("tickets.html", islogged = islogged, tickets = tickets)
 if __name__ == '__main__':
    app.run(debug=True)
