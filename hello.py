@@ -13,10 +13,6 @@ conn = psycopg2.connect(
    password=config["PASSWORD"]
 )
 
-# -----------------------debug-----------------------
-# conn = psycopg2.connect(
-#     'postgres://ivinay718:19yIbwLGDAQq@ep-tiny-morning-297228.ap-southeast-1.aws.neon.tech/neondb?options=project%3Dep-tiny-morning-297228'
-# )
 
 cur = conn.cursor()
 
@@ -94,7 +90,7 @@ def signup():
       print(request.form['username'], request.form['name'])
 
       try:
-         cur.execute("insert into login values('{}', '{}')".format(request.form['username'], request.form['password']))
+         cur.execute("insert into user_table (name, username, password) values('{}', '{}', '{}')".format(request.form['name'], request.form['username'], request.form['password']))
          
          # to persiste the changes
          conn.commit()
@@ -182,13 +178,31 @@ def passenger():
          flash("You need to login first!")
          session['train_info'] = train_info
          return redirect(url_for('login'))
+
    return render_template("passenger.html", islogged = islogged, train_info = train_info)
 
 
 @app.route('/book', methods = ['GET', 'POST'])
 def book():
    if request.method == 'POST':
-      booking_info = request.form
+      try:
+         booking_info = request.form
+         print ("hello")
+         print (request.form)
+         string = request.form['train_info'].replace("\"", "")
+         Dict = eval(string)
+         print(Dict)
+         print (type(Dict))
+         print(Dict['class'], Dict['source'])
+         cur.execute("select user_id from user_table where user_table.username = '{}'".format( session['username']))
+         user_id = cur.fetchone()[0]
+         print (user_id)
+         data = cur.execute("select create_ticket({},{},'{}','{}','{}',{},'{}','{}','{}')".format( user_id, Dict['train_no'], Dict['source'], Dict['destination'],request.form['name-1'], request.form['age-1'], request.form['sex-1'], Dict['class'], Dict['date']))
+         data = cur.fetchall()
+         print(data)
+         conn.commit()
+      except Exception as err:
+         flash("Something went wrong, Error : ", err)
       return render_template("book.html", islogged = islogged, booking_info = booking_info)
 
 if __name__ == '__main__':
