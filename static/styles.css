@@ -1,108 +1,39 @@
-body{
-    /* background-color: brown; */
-    /* background-image: url("images/secret/char4.jpg"); */
-    background: linear-gradient(0deg,rgba(0,0,0,.0) 0,transparent 45%,transparent 45%,rgba(0,0,0,.5)), url("images/secret/char4.jpg") no-repeat;
-    background-size: cover;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+:root{
+    font-family: 'Bungee Inline', cursive;
+    font-family: 'PT Sans Narrow', sans-serif;
+    /* font-family: 'Righteous', cursive;
+    font-family: 'Unbounded', cursive; */
+}
+
+body {
     margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
+    color: #202731;
+    background-color:  wheat;
+    padding: 2em 5em;
 }
 
-a{
-    text-decoration: none;
-    color: white;
-}
-
-.main_block{
-    margin-left: 10%;
-    margin-right: 10%;
-}
-
-.top_header{
-    padding-top: 2%;
-}
-
-.top_logo{
-    display: inline-block;
-}
-
-.top_logo_img{
-    height: 10%;
-    width: 50%;
-}
-
-.top_options{
-    float: right;
-}
-
-.top_sub_option{
-    display: inline-block;
-    margin-left: 10px;
-    margin-top: 13%;
-}
-
-.top_sub_option_button{
-    background-color: green;
-    text-align: center;
-    padding: 5px;
-}
-
-.middle_block{
-    padding-top: 16%;
-    /* padding-bottom: 16%; */
-}
-
-.main_heading{
-    font-size: 200%;
-    font-weight: bold;
-}
-
-.main_entry{
-    background-color: rgba(0,0,0,.5);
-    margin-top: 2%;
-    padding: 3%;
-}
-
-.main_username{
-    display: inline-block;
-}
-
-.main_password{
-    display: inline-block;
-}
-
-.main_date{
-    display: inline-block;
-}
-
-.main_select_button{
-    background-color: green;
-    text-align: center;
-    padding: 5px;
-}
-
-.main_button{
-    /* display: inline-block; */
-    float: right;
-}
-
-/* .main_footer{
-    background-color: rgb(255, 255, 255);
-    color: black;
-    font-weight: bold;
-    text-align: center;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 6%;
-    padding-top: 2%;
-}
-
-.footer_agenda{
+.main-block {
+    position: relative;
     display: flex;
-    justify-content: space-between;
-} */
+    padding: 1vh 5vh;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: flex-start; */
+    gap: 2em;
+}
+
+
+.navbar:first-child {
+    margin-right: auto;
+}
+
+.top-logo-img {
+    height: 10em;
+}
+
+
+

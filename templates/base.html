@@ -3,18 +3,21 @@
 <head>
     <title>{% block title %} {{ title }} {% endblock title %}</title>
     <link rel="stylesheet" href="../static/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=PT+Sans+Narrow&family=Righteous&family=Unbounded:wght@900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
    <div class="main_block">
-    <div class="top_header">
-        <div class="top_logo">
+        <nav class="navbar">
+        <div class="logo-main">
             <a href="/">
-                <img class="top_logo_img" src="../static/images/logo.png" alt="Railway Reservation logo">
+                <img class="top_logo_img" src="../static/images/new-logo.png" alt="Railway Reservation logo">
             </a>
         </div>
-        <div class="top_options">
+
             <div class="top_sub_option">
                 <a href="/pnr_number">PNR</a>
             </div>
@@ -22,7 +25,7 @@
                 <a href="/schedule">train shedule</a>
             </div>
             
-            {% if islogged == 0 %}
+            <!-- {% if islogged == 0 %} -->
 
                 <!-- <p>You are not logged in</p> -->
                 <div class="top_sub_option">
@@ -36,7 +39,7 @@
                        SignIn
                    </a>
                </div>
-             {% else %}
+             <!-- {% else %} -->
                <a href="/tickets">View Tickets</a>
                 <!-- <p>You are logged in as {{ username }}</p> -->
                 <!-- <a href="/logout">Click here to logout</a> -->
@@ -45,13 +48,12 @@
                     Logout
                 </a>
             </div>
-             {% endif %}
-        </div>
+             <!-- {% endif %} -->
+
+    </nav>
+        {% block content %} 
+        <h1>This is a placeholder, if you see this, there's some error</h1>
+        {% endblock content %}   
     </div>
- </div>
-    {% block content %} 
-    <h1>This is a placeholder, if you see this, there's some error</h1>
-    {% endblock content %}   
-    
 </body>
 </html>
