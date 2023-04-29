@@ -9,8 +9,12 @@
 </head>
 
 <body>
-
+    <div style="display: inline-block;">
+        <div class="curve"></div> 
+    </div>
+    
    <div class="main_block">
+     
         <nav class="navbar">
         <div class="logo-main">
             <a href="/">
@@ -40,7 +44,8 @@
                    </a>
                </div>
              <!-- {% else %} -->
-               <a href="/tickets">View Tickets</a>
+             <div class="top_sub_option"><a href="/tickets">View Tickets</a></div>
+             <!-- <a href="/tickets">View Tickets</a> -->
                 <!-- <p>You are logged in as {{ username }}</p> -->
                 <!-- <a href="/logout">Click here to logout</a> -->
                <div class="top_sub_option">
@@ -53,7 +58,9 @@
     </nav>
         {% block content %} 
         <h1>This is a placeholder, if you see this, there's some error</h1>
-        {% endblock content %}   
+        {% endblock content %} 
+        
     </div>
+   
 </body>
 </html>

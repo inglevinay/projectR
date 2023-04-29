@@ -10,6 +10,7 @@ body {
     color: #202731;
     background-color:  wheat;
     padding: 2em 5em;
+    /* overflow: hidden; */
 }
 
 .main-block {
@@ -17,23 +18,33 @@ body {
     display: flex;
     padding: 1vh 5vh;
     flex-direction: column;
+    /* height: 100vh;
+    width: 100vw; */
 }
 
 .navbar {
     display: flex;
     flex-direction: row;
-    /* justify-content: flex-start; */
     gap: 2em;
+    justify-content: space-between;
 }
 
 
-.navbar:first-child {
+.navbar > *> * {
     margin-right: auto;
-}
-
-.top-logo-img {
-    height: 10em;
+    text-decoration: none;
 }
 
 
+.top_logo_img {
+    height: 5em;
+    padding-right: 25vw;
+}
 
+.curve {
+    display: block;
+    position: fixed;
+    /* background-image: url(/static/images/layered-waves-haikei.svg); */
+    background:black;
+
+}
