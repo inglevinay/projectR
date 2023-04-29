@@ -20,23 +20,35 @@
     {{train_info['date']}}
    </div>
 
-    <button onclick="addField()">Add Passenger</button>
-    <form id="pax-form" method="post" action="/book">
-        
-        <div class="pax">
-            <label for="name-1">Enter Passenger Name</label>
-            <input type="text" name="name-1" id=""/>
-            <label for="age-1">Enter Passenger Age</label>
-            <input type="number" name="age-1" id=""/>
-            <label for="sex-1">Enter Gender</label>
-            <select name="sex-1" id="">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-            <button type="submit" id="pax-submit">Submit</button>
+    <div class="main_block">
+        <div class="middle_block">
+            <div class="main_heading">
+                ADD PASSENGER DETAIS <br> 
+                FOR TICKET BOOKING
+            </div>
+            <div class="main_entry">
+                <button onclick="addField()">Add Passenger</button>
+                <form id="pax-form" method="post" action="/book">
+                    
+                    <input type="hidden" name="train_info" value="{{train_info}}">
+
+                    <div class="pax">
+                        <label for="name-1">Enter Passenger Name</label>
+                        <input type="text" name="name-1" id=""/>
+                        <label for="age-1">Enter Passenger Age</label>
+                        <input type="number" name="age-1" id=""/>
+                        <label for="sex-1">Enter Gender</label>
+                        <select name="sex-1" id="">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button class="main_button" type="submit" id="pax-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-   </form>
+    </div>
 
    
 

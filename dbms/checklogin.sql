@@ -3,9 +3,9 @@ returns int
 as $BODY$
 declare status int;
 begin
-if exists(select * from login where username = inpuser and password = inppass) then
+if exists(select * from user_table where username = inpuser and password = inppass) then
 	status := 0;
-elsif exists(select * from login where username = inpuser) then
+elsif exists(select * from user_table where username = inpuser) then
 	status := 1;
 else status := 2;
 end if;
