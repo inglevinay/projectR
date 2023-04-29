@@ -172,7 +172,7 @@ def passenger():
       sel_class = sel_info[0]
       sel_fare = sel_info[1]
       sel_seat = sel_info[2]
-      
+
       train_info = {"train_no": request.form['train_no'], "date": request.form['date'], "source": request.form['source'], "destination": request.form['destination'], "class": sel_class, "fare": sel_fare, "max_pax": sel_seat}
       if 'username' not in session:
          flash("You need to login first!")
@@ -207,7 +207,7 @@ def book():
 
 
 @app.route('/tickets', methods = ['GET', 'POST'])
-def view_tickets():
+def tickets():
    if request.method == 'POST':
       print("should do nothing for now")
       return redirect(url_for('index'))
@@ -227,7 +227,23 @@ def view_tickets():
          tickets = cur.fetchall()
          print(tickets)
          return render_template("tickets.html", islogged = islogged, tickets = tickets)
-      
+
+
+@app.route('/cancel', methods = ['POST'])
+def cancel():
+   if request.method == 'POST':
+      print(request.form['ticket_id'])
+      print(type(request.form['ticket_id']))
+      try:
+         tid = request.form['ticket_id']
+         print(cur.execute("select * from delete_ticket({});".format(tid)))
+         st = cur.fetchall()
+         conn.commit()
+
+         flash("Ticket cancelled successfully!")
+      except Exception as err:
+         flash("Something went wrong, Error : ", err)
+      return redirect(url_for('tickets'))
 
 if __name__ == '__main__':
    app.run(debug=True)

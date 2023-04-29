@@ -26,6 +26,12 @@
             <td>{{ticket[2]}}</td>
             <td>{{ticket[3]}}</td>
             <td>{{ticket[4]}}</td>
+            <td>
+                <form action="/cancel" method="post" onsubmit="return confirm('Do you really want to delete this ticket')">
+                    <input type="hidden" name="ticket_id" value="{{ticket[0]}}">
+                    <button type="submit" >Delete Ticket</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
