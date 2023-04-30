@@ -75,7 +75,8 @@ def login():
             cp_train_info = session['train_info']
             print(session['train_info'])
             session.pop('train_info', None)
-            # return render_template('trains.html', trains = cp_train_info["train_no"], islogged = islogged, source = cp_train_info["source"], destination = cp_train_info["destination"], date = cp_train_info["date"], tr_class = cp_train_info["class"])
+            print(cp_train_info)
+            return render_template('trains.html', trains = [], islogged = islogged, source = cp_train_info["source"], destination = cp_train_info["destination"], date = cp_train_info["date"], tr_class = cp_train_info["class"].replace("'", ""))
             return redirect(url_for('trains'))
 
          return redirect(url_for('index'))
