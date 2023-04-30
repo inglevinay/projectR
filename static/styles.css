@@ -106,3 +106,47 @@ a{
     display: flex;
     justify-content: space-between;
 } */
+
+
+/* ticket */
+
+.ticket-flex {
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    border: 2px dashed wheat;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+.ticket-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 2px dashed wheat;
+}
+
+.ticket-route {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.ticket-source, .ticket-destination {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.ticket-details-head, .ticket-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.ticket-details-head {
+    border-top: inherit ;
+    border-bottom: inherit  ;
+}

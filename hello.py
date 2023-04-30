@@ -257,6 +257,7 @@ def book():
 
          cur.execute("select user_id from user_table where user_table.username = '{}'".format( session['username']))
          user_id = cur.fetchone()[0]
+
          print (user_id)  
          data = [] 
 
@@ -268,15 +269,22 @@ def book():
             data.append(cur.fetchone())
          # data = cur.fetchall()
          print(data)
+
          conn.commit()
+         cur.close()
+         conn.close()
+
       except Exception as err:
          print (err)
          flash("Something went wrong, Error : ", err)
+         return redirect(url_for('index'))
       return render_template("book.html", islogged = islogged, booking_info = booking_info)
+   return redirect(url_for('index'))
 
 
 @app.route('/tickets', methods = ['GET', 'POST'])
 def tickets():
+   updateLoginStatus()
    if request.method == 'POST':
       print("should do nothing for now")
       return redirect(url_for('index'))
