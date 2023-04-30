@@ -19,7 +19,12 @@
             <form action="/schedule" method="post">
                 <div class="main_username">
                     Train Number <br>
-                    <input type="number" name="train_no" id=""/>
+                    <input type="number" name="train_no" list="train_options"/>
+                    <datalist id="train_options">
+                        {% for train in all_trains %}
+                        <option value="{{ train[0] }}">{{ train[1]}}</option>
+                        {% endfor %}
+                    </datalist>
                 </div>
                 <div class="main_button">
                     <input class="main_select_button" type="submit" value="Submit">

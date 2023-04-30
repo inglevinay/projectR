@@ -21,21 +21,35 @@
          </div>
  
          <div class="main_entry">
-             <div class="main_username">
+            <div class="main_username">
                  Boarding Station <br>
-                 <input type="text" name="source">
-             </div>
+                 <input type="text" name="source" list="station-list"/>
+                 <datalist id="station-list">
+                     {% for station in stations %}
+                     <option value="{{ station[2] }}">{{ station[1]}} ({{station[2]}}) </option>
+                     {% endfor %}
+                 </datalist>
+            </div>
              <div class="main_username">
                  Destination Station <br>
-                 <input type="text" name="destination">
+                 <input type="text" name="destination" list="station-list"/>
+                 <datalist id="station-list">
+                    {% for station in stations %}
+                    <option value="{{ station[2] }}">{{ station[1]}} ({{station[2]}}) </option>
+                    {% endfor %}
+                </datalist>
              </div>
              <div class="main_date">
                  Date <br>
                  <input type="date" name="date">
              </div>
              <div class="main_username">
-                 Class <br>
-                 <input type="text" name="class">
+                Class <br>
+                <select name="class">
+                    {% for class in classes %}
+                    <option value="{{ class[0] }}">{{ class[0]}}</option>
+                    {% endfor %}
+                 </select>
              </div>
              <div class="main_button">
                  <br>

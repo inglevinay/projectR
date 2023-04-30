@@ -44,11 +44,19 @@ def index():
    updateLoginStatus()
 
    print(islogged)
+   conn = getConn()
+   cur = conn.cursor()
+   cur.execute("select * from station;")
+   stations = cur.fetchall()
+   cur.execute("select * from train_class;")
+   classes = cur.fetchall()
+   cur.close()
+   conn.close()
    # if request.method == 'POST':
    #    # print(request.form["source"], request.form["destination"], request.form["date"], request.form["class"])
    #    if 'train' in session:
    #       return redirect(url_for("trains"))
-   return render_template("index.html", username = uname, islogged = islogged)
+   return render_template("index.html", username = uname, islogged = islogged, stations = stations, classes = classes)
 
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -77,7 +85,6 @@ def login():
             session.pop('train_info', None)
             print(cp_train_info)
             return render_template('trains.html', trains = [], islogged = islogged, source = cp_train_info["source"], destination = cp_train_info["destination"], date = cp_train_info["date"], tr_class = cp_train_info["class"].replace("'", ""))
-            return redirect(url_for('trains'))
 
          return redirect(url_for('index'))
       elif status[0] == 1:
@@ -141,6 +148,7 @@ def pnr_number():
 def schedule():
    schedule = []
    train_no = None
+   all_trains = []
    if request.method == 'POST':
       try:
          conn = getConn()
@@ -154,7 +162,18 @@ def schedule():
          print(err)
          flash("Something went wrong, maybe your input!")
          return redirect(url_for('index'))
-   return render_template('schedule.html', train_no = train_no, route = schedule , islogged = islogged)
+      
+   try:
+      conn = getConn()
+      cur = conn.cursor()
+      cur.execute("select * from train;")
+      all_trains = cur.fetchall()
+      conn.commit()
+      conn.close()
+   except Exception as err:
+      print(err)
+      flash("Something went wrong, maybe your input!")
+   return render_template('schedule.html', train_no = train_no, route = schedule , islogged = islogged, all_trains = all_trains)
 
 
 @app.route('/trains', methods = ['GET', 'POST'])
@@ -167,6 +186,8 @@ def trains():
          cur.execute("select * from train_class")
          classes = cur.fetchall()
          print(classes)
+         cur.execute("select * from station;")
+         stations = cur.fetchall()
          cur.execute("select * from availableRoute('{}', '{}', '{}', '{}')".format( request.form['date'], request.form['source'], request.form['destination'],request.form['class']))
          data = cur.fetchall()
          conn.commit()
@@ -195,7 +216,7 @@ def trains():
          
       except Exception as err:
          flash("Something went wrong, Error : ", err)
-      return render_template('trains.html', trains = trains, islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], tr_class = request.form['class'])
+      return render_template('trains.html', trains = trains, islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], tr_class = request.form['class'], classes = classes, stations = stations)
    return render_template('trains.html', trains = trains, islogged = islogged)
 
 
