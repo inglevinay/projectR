@@ -232,6 +232,7 @@ def tickets():
 @app.route('/cancel', methods = ['POST'])
 def cancel():
    if request.method == 'POST':
+      cur = conn.cursor()
       print(request.form['ticket_id'])
       print(type(request.form['ticket_id']))
       try:

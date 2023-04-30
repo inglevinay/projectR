@@ -11,6 +11,9 @@ body {
     background-color:  wheat;
     padding: 2em 5em;
     /* overflow: hidden; */
+    background-image: url(/static/images/layered-waves-haikei.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .main-block {
@@ -47,4 +50,30 @@ body {
     /* background-image: url(/static/images/layered-waves-haikei.svg); */
     background:black;
 
+}
+
+.form-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5em 0;
+}
+
+.brand-image {
+    width: 40vw;
+}
+
+.middle_block > *{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.main_heading {
+    padding-bottom: 2em;
+}
+
+.middle_block {
+    padding: 2em;
+    border: 2px solid #202731;
 }

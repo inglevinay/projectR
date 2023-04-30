@@ -4,7 +4,7 @@
 
    {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <ul>
+      <ul class="messages">
             {% for message in messages %}
             <li> {{ message }}</li>
             {% endfor %}
@@ -12,7 +12,7 @@
       {% endif %}
    {% endwith %}
    
-   <div class="main_block">
+   <div class="form-block">
         <form action="/trains" method="post">
       <div class="middle_block">
          <div class="main_heading">
@@ -45,6 +45,7 @@
      </div>
 
         </form>
+        <img src="/static/images/train2.jpg" alt="" class="brand-image">
     </div>
 
    <!-- <form action="/index" method="post">
