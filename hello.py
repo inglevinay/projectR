@@ -245,6 +245,7 @@ def book():
          booking_info = request.form
          print ("hello")
          print (request.form)
+
          string = request.form['train_info'].replace("\"", "")
          Dict = eval(string)
          print(Dict)
@@ -253,17 +254,28 @@ def book():
 
          conn = getConn()
          cur = conn.cursor()
+
          cur.execute("select user_id from user_table where user_table.username = '{}'".format( session['username']))
          user_id = cur.fetchone()[0]
-         print (user_id)
-         data = cur.execute("select create_ticket({},{},'{}','{}','{}',{},'{}','{}','{}')".format( user_id, Dict['train_no'], Dict['source'], Dict['destination'],request.form['name-1'], request.form['age-1'], request.form['sex-1'], Dict['class'], Dict['date']))
-         data = cur.fetchall()
-         print("zhalmudi " , data)
+
+         print (user_id)  
+         data = [] 
+
+         print ("for loop here")
+         print(int((len(request.form)-1)/3))
+         for index in range(int((len(request.form)-1)/3)):
+            print (index+1, 'name-'+str(index+1), request.form['name-'+str(index+1)])
+            cur.execute("select create_ticket({},{},'{}','{}','{}',{},'{}','{}','{}')".format( user_id, Dict['train_no'], Dict['source'], Dict['destination'],request.form['name-'+str(index+1)], request.form['age-'+str(index+1)], request.form['sex-'+str(index+1)], Dict['class'], Dict['date']))
+            data.append(cur.fetchone())
+         # data = cur.fetchall()
+         print(data)
+
          conn.commit()
          cur.close()
          conn.close()
 
       except Exception as err:
+         print (err)
          flash("Something went wrong, Error : ", err)
          return redirect(url_for('index'))
       return render_template("book.html", islogged = islogged, booking_info = booking_info)
