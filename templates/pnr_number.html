@@ -25,5 +25,27 @@
 
 </div>
 
+{{pnr_number}}
+<div class="main_block">
+    <div class="main_entry">
+    <table>
+        <tr>
+            <th>Train_id</th>
+            <th>Seat_number</th>
+            <th>Src_station</th>
+            <th>Dest_station</th>
+            
+        </tr>
+        {% for data in pnr_number %}
+        <tr>
+            <td>{{ data[0] }}</td>
+            <td>{{ data[1] }}</td>
+            <td>{{ data[2] }}</td>
+            <td>{{ data[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+</div>
 
 {% endblock content %}
