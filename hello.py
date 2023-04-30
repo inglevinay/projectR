@@ -232,18 +232,28 @@ def tickets():
 @app.route('/cancel', methods = ['POST'])
 def cancel():
    if request.method == 'POST':
+      print("hello1")
       print(request.form['ticket_id'])
       print(type(request.form['ticket_id']))
+      print("hello2")
       try:
-         tid = request.form['ticket_id']
-         print(cur.execute("select * from delete_ticket({});".format(tid)))
-         st = cur.fetchall()
+         tid = int(request.form['ticket_id'])
+         print ("inside try")
+         print (tid, type(tid))
+         print(session)
+
+         sql = '''call deleteTicket(86);'''
+         cur.execute(sql)
+         results = cur.fetchall()
+         print (results)
          conn.commit()
 
          flash("Ticket cancelled successfully!")
       except Exception as err:
          flash("Something went wrong, Error : ", err)
-      return redirect(url_for('tickets'))
+   else:
+      print ("hi hello")
+   return redirect(url_for('tickets'))
 
 if __name__ == '__main__':
    app.run(debug=True)
