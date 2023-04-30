@@ -250,6 +250,7 @@ def book():
          print(Dict)
          print (type(Dict))
          print(Dict['class'], Dict['source'])
+
          conn = getConn()
          cur = conn.cursor()
          cur.execute("select user_id from user_table where user_table.username = '{}'".format( session['username']))
@@ -257,15 +258,21 @@ def book():
          print (user_id)
          data = cur.execute("select create_ticket({},{},'{}','{}','{}',{},'{}','{}','{}')".format( user_id, Dict['train_no'], Dict['source'], Dict['destination'],request.form['name-1'], request.form['age-1'], request.form['sex-1'], Dict['class'], Dict['date']))
          data = cur.fetchall()
-         print(data)
+         print("zhalmudi " , data)
          conn.commit()
+         cur.close()
+         conn.close()
+
       except Exception as err:
          flash("Something went wrong, Error : ", err)
+         return redirect(url_for('index'))
       return render_template("book.html", islogged = islogged, booking_info = booking_info)
+   return redirect(url_for('index'))
 
 
 @app.route('/tickets', methods = ['GET', 'POST'])
 def tickets():
+   updateLoginStatus()
    if request.method == 'POST':
       print("should do nothing for now")
       return redirect(url_for('index'))
