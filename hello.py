@@ -1,20 +1,27 @@
-from flask import Flask, render_template, request, make_response, session, redirect, url_for, flash
+from flask import Flask, render_template, request, make_response, session, redirect, url_for, flash, jsonify
 from dotenv import dotenv_values
 import os, psycopg2
+
 app = Flask(__name__)
 app.secret_key = "Vinay"
 
 config = dotenv_values(".env")      # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
-conn = psycopg2.connect(
+# conn = psycopg2.connect(
+#    host=config["HOST"],
+#    database=config["DATABASE"],
+#    user=config["USER"],
+#    password=config["PASSWORD"]
+# )
+
+def getConn():
+   return psycopg2.connect(
    host=config["HOST"],
    database=config["DATABASE"],
    user=config["USER"],
-   password=config["PASSWORD"]
-)
+   password=config["PASSWORD"])
 
 
-cur = conn.cursor()
 
 # -----------------------debug-----------------------
 # cur.execute("select * from login")
@@ -48,10 +55,16 @@ def index():
 def login():
    error = None
    print("ses", session)
+      
    if request.method == 'POST':
 
+      conn = getConn()
+      cur = conn.cursor()
       cur.execute("select * from checklogin('{}', '{}')".format(request.form['username'], request.form['password']))
       status = cur.fetchone()
+      conn.commit()
+      conn.close()
+
       
       if status[0] == 0:
          session['username'] = request.form['username']
@@ -90,10 +103,14 @@ def signup():
       print(request.form['username'], request.form['name'])
 
       try:
+         conn = getConn()
+         cur = conn.cursor()
          cur.execute("insert into user_table (name, username, password) values('{}', '{}', '{}')".format(request.form['name'], request.form['username'], request.form['password']))
-         
          # to persiste the changes
          conn.commit()
+         conn.commit()
+         conn.close()
+
          flash('New account generation was successful!')
       except:
          flash("Account creation failed. Try again!")
@@ -107,10 +124,15 @@ def signup():
 def pnr_number():
    pnr_number = []
    if request.method == 'POST':
+      conn = getConn()
+      cur = conn.cursor()
       cur.execute("select train_id, seat_no, src_station, dest_station \
                   from reserves inner join ticket using (ticket_id) \
                   inner join seat using (seat_id) where reserves.pnr = {}".format(request.form['pnr_number']))
       pnr_number = cur.fetchall()
+      conn.commit()
+      conn.close()
+
    return render_template('pnr_number.html', islogged = islogged, pnr_number = pnr_number)
 
 
@@ -120,9 +142,13 @@ def schedule():
    train_no = None
    if request.method == 'POST':
       try:
+         conn = getConn()
+         cur = conn.cursor()
          cur.execute("select * from train_schedule({})".format(request.form['train_no']))
          train_no = request.form['train_no']
          schedule = cur.fetchall()
+         conn.commit()
+         conn.close()
       except Exception as err:
          print(err)
          flash("Something went wrong, maybe your input!")
@@ -135,21 +161,29 @@ def trains():
    trains = []
    if request.method == 'POST':
       try:
+         conn = getConn()
+         cur = conn.cursor()
          cur.execute("select * from train_class")
          classes = cur.fetchall()
          print(classes)
          cur.execute("select * from availableRoute('{}', '{}', '{}', '{}')".format( request.form['date'], request.form['source'], request.form['destination'],request.form['class']))
          data = cur.fetchall()
+         conn.commit()
+         conn.close()
          print(data)
          for d in data:
             td = [d[0], d[1], d[2], d[3], d[4], [(request.form['class'], d[5], d[6])]]
 
             for c in classes:
                if c[0] != request.form['class']:
+                  conn = getConn()
+                  cur = conn.cursor()
                   cur.execute("select * from calc_fare({}, '{}', '{}', '{}')".format(td[0], c[0], td[1], td[3]))
                   fare = cur.fetchone()
                   cur.execute("select * from countavailableseats({}, '{}', '{}', '{}', '{}')".format(td[0], request.form['date'], td[1], td[3], c[0]))
                   seats = cur.fetchone()
+                  conn.commit()
+                  conn.close()
                   td[5].append((c[0], fare[0], seats[0]))
             trains.append(td)
 
@@ -194,6 +228,8 @@ def book():
          print(Dict)
          print (type(Dict))
          print(Dict['class'], Dict['source'])
+         conn = getConn()
+         cur = conn.cursor()
          cur.execute("select user_id from user_table where user_table.username = '{}'".format( session['username']))
          user_id = cur.fetchone()[0]
          print (user_id)
@@ -216,6 +252,8 @@ def tickets():
          flash("You need to login first!")
          return redirect(url_for('login'))
       else:
+         con = getConn()
+         cur = con.cursor()
          cur.execute('''select * from ticket
                         where ticket_id in (
                            select ticket_id from book
@@ -229,31 +267,33 @@ def tickets():
          return render_template("tickets.html", islogged = islogged, tickets = tickets)
 
 
-@app.route('/cancel', methods = ['POST'])
+@app.route('/cancel', methods = ['GET', 'POST'])
 def cancel():
    if request.method == 'POST':
       print("hello1")
       print(request.form['ticket_id'])
       print(type(request.form['ticket_id']))
       print("hello2")
-      try:
-         tid = int(request.form['ticket_id'])
-         print ("inside try")
-         print (tid, type(tid))
-         print(session)
+      conn = getConn()
+      cur = conn.cursor()
+      # try:
+      tid = int(request.form['ticket_id'])
+      print ("inside try")
+      print (tid, type(tid))
+      print(session)
 
-         sql = '''call deleteTicket(86);'''
-         cur.execute(sql)
-         results = cur.fetchall()
-         print (results)
-         conn.commit()
-
-         flash("Ticket cancelled successfully!")
-      except Exception as err:
-         flash("Something went wrong, Error : ", err)
+      sql = '''call deleteTicket({});'''
+      cur.execute(sql.format(tid))
+      conn.commit()
+      conn.close()
+      flash("Ticket cancelled successfully!")
+      # except Exception as err:
+      #    flash("Something went wrong, Error : ", err)
    else:
       print ("hi hello")
    return redirect(url_for('tickets'))
+
+
 
 if __name__ == '__main__':
    app.run(debug=True)
