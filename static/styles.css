@@ -150,3 +150,26 @@ a{
     border-top: inherit ;
     border-bottom: inherit  ;
 }
+
+.dash {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    backdrop-filter: blur(20px);
+}
+
+.dash-input {
+    display: flex;
+    flex-direction: row;
+    padding: 1em;
+    justify-content: space-between;
+}
+
+.dash-output {
+    display: flex;
+    flex-direction: column;
+}
+
+.dash-buttons {
+    display: flex;
+}

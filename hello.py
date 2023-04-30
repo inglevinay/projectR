@@ -98,6 +98,7 @@ def login():
 
       conn = getConn()
       cur = conn.cursor()
+      print(request.form, request.form['username'])
       cur.execute("select * from checklogin('{}', '{}')".format(request.form['username'], request.form['password']))
       status = cur.fetchone()
       conn.commit()
@@ -138,7 +139,6 @@ def logout():
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
    if request.method == 'POST':
-      print(request.form['username'], request.form['name'])
 
       try:
          conn = getConn()
@@ -388,16 +388,28 @@ def dashboard():
       flash("You need to login first!")
       return redirect(url_for('admin'))
    else:
-      conn = getAdminConn(session['admin']['username'], session['admin']['password'])
-      cur = conn.cursor()
-      cur.execute("select * from train")
-      trains = cur.fetchall()
-      cur.execute("select * from user_table")
-      users = cur.fetchall()
-      cur.close()
-      conn.close()
-
-   print(trains, users)
+      try:
+         conn = getAdminConn(session['admin']['username'], session['admin']['password'])
+         cur = conn.cursor()
+         output = []
+         if request.method == 'POST':
+            print(request.form)
+            if 'view-trains' in request.form:
+               cur.execute('select * from train')
+               print('asfasf')
+            elif 'view-users' in request.form:
+               print('asfasfADSF')
+               cur.execute('select * from user_table')
+            elif 'custom_query' in request.form:
+               print('asfasfSDF')
+               cur.execute(request.form['custom_query'])
+            output = cur.fetchall()
+         cur.close()
+         conn.close()
+         return render_template("dashboard.html", islogged = islogged, output = output)
+      except Exception as err:
+         flash("Something went wrong, Error : {}".format(err))
+         return redirect(url_for('admin'))
    return redirect(url_for('index'))
 
 
