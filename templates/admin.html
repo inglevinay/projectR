@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block content %} 
+
+   {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+            {% for message in messages %}
+            <li> {{ message }}</li>
+            {% endfor %}
+      </ul>
+      {% endif %}
+   {% endwith %}
+
+   <form action="/admin" method="post">
+    <input type="text" name="username" id=""/>
+    <input type="password" name="password" id=""/>
+    <button type="submit"></button>
+   </form>
+{% endblock content %}

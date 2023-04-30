@@ -7,12 +7,36 @@ app.secret_key = "Vinay"
 
 config = dotenv_values(".env")      # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
+# class AdminUser:
+#    def __init__(self, username, password):
+#       self.username = username
+#       self.password = password
+
+#    def getAdminConn(self):
+#       if(self.username == None or self.password == None): return None
+#       return psycopg2.connect(
+#          host=config["HOST"],
+#          database=config["DATABASE"],
+#          user=self.username,
+#          password=self.password
+#       )
+   
+# adminInst = AdminUser(None, None)
 # conn = psycopg2.connect(
 #    host=config["HOST"],
 #    database=config["DATABASE"],
 #    user=config["USER"],
 #    password=config["PASSWORD"]
 # )
+
+def getAdminConn(username, password):
+      if(username == None or password == None): return None
+      return psycopg2.connect(
+         host=config["HOST"],
+         database=config["DATABASE"],
+         user=username,
+         password=password
+      )
 
 def getConn():
    return psycopg2.connect(
@@ -21,7 +45,13 @@ def getConn():
    user=config["USER"],
    password=config["PASSWORD"])
 
-
+def getAdminConn(username, password):
+   return psycopg2.connect(
+      host=config["HOST"],
+      database=config["DATABASE"],
+      user=username,
+      password=password
+   )
 
 # -----------------------debug-----------------------
 # cur.execute("select * from login")
@@ -334,6 +364,41 @@ def cancel():
       print ("hi hello")
    return redirect(url_for('tickets'))
 
+
+@app.route('/admin', methods = ['GET', 'POST'])
+def admin():
+   updateLoginStatus()
+   if request.method == 'POST':
+
+      try:
+         conn = getAdminConn(request.form['username'], request.form['password'])
+         flash("Login successful!")
+         session['admin'] = {'username': request.form['username'], 'password': request.form['password']}
+         conn.close()
+         return redirect(url_for('dashboard', islogged = islogged))
+      except Exception as err:
+         flash("Something went wrong, Error : {}".format(err))
+
+   return render_template("admin.html", islogged = islogged)
+
+
+@app.route('/dashboard', methods = ['POST', 'GET'])
+def dashboard():
+   if('admin' not in session):
+      flash("You need to login first!")
+      return redirect(url_for('admin'))
+   else:
+      conn = getAdminConn(session['admin']['username'], session['admin']['password'])
+      cur = conn.cursor()
+      cur.execute("select * from train")
+      trains = cur.fetchall()
+      cur.execute("select * from user_table")
+      users = cur.fetchall()
+      cur.close()
+      conn.close()
+
+   print(trains, users)
+   return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
