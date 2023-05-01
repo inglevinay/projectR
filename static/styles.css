@@ -173,3 +173,8 @@ a{
 .dash-buttons {
     display: flex;
 }
+
+.admin-form {
+    display: flex;
+    padding: 10em;
+}

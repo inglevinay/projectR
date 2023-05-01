@@ -220,6 +220,7 @@ def trains():
          stations = cur.fetchall()
          cur.execute("select * from availableRoute('{}', '{}', '{}', '{}')".format( request.form['date'], request.form['source'], request.form['destination'],request.form['class']))
          data = cur.fetchall()
+         print('asdfas')
          conn.commit()
          conn.close()
          print(data)
@@ -245,7 +246,7 @@ def trains():
             flash("No trains found!")
          
       except Exception as err:
-         flash("Something went wrong, Error : ", err)
+         flash("Something went wrong, Error : {}".format(err))
       return render_template('trains.html', trains = trains, islogged = islogged, source = request.form['source'], destination = request.form['destination'], date = request.form['date'], tr_class = request.form['class'], classes = classes, stations = stations)
    return render_template('trains.html', trains = trains, islogged = islogged)
 

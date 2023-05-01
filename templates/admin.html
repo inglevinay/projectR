@@ -11,10 +11,12 @@
       </ul>
       {% endif %}
    {% endwith %}
-
-   <form action="/admin" method="post">
-    <input type="text" name="username" id=""/>
-    <input type="password" name="password" id=""/>
-    <button type="submit"></button>
-   </form>
+   <div class="admin-form">
+      <form action="/admin" method="post">
+         <input type="text" name="username" id="" placeholder="Enter Username"/>
+         <input type="password" name="password" id="" placeholder="Enter Password"/>
+         <button type="submit">Login as Admin</button>
+        </form>
+   </div>
+   
 {% endblock content %}
