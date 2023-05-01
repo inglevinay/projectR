@@ -291,13 +291,15 @@ def book():
 
          print (user_id)  
          data = [] 
-
+         passengers = []
          print ("for loop here")
          print(int((len(request.form)-1)/3))
          for index in range(int((len(request.form)-1)/3)):
             print (index+1, 'name-'+str(index+1), request.form['name-'+str(index+1)])
             cur.execute("select create_ticket({},{},'{}','{}','{}',{},'{}','{}','{}')".format( user_id, Dict['train_no'], Dict['source'], Dict['destination'],request.form['name-'+str(index+1)], request.form['age-'+str(index+1)], request.form['sex-'+str(index+1)], Dict['class'], Dict['date']))
-            data.append(cur.fetchone())
+            data.append(eval(cur.fetchone()[0])[1])
+            print(type(data[-1]))
+            passengers.append((request.form['name-'+str(index+1)], request.form['age-'+str(index+1)], request.form['sex-'+str(index+1)], data[-1]))
          # data = cur.fetchall()
          print(data)
 
@@ -309,7 +311,7 @@ def book():
          print (err)
          flash("Something went wrong, Error : ", err)
          return redirect(url_for('index'))
-      return render_template("book.html", islogged = islogged, booking_info = booking_info)
+      return render_template("book.html", islogged = islogged, booking_info = booking_info, train_info = Dict, passengers = passengers)
    return redirect(url_for('index'))
 
 

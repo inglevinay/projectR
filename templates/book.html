@@ -30,12 +30,12 @@
          <div class="ticket-flex">
             <div class="ticket-head">
                <div>
-                  <h1>11013</h1>
-                  <h2>Coimbatore Expr</h2>
+                  <h1>{{ train_info['train_no'] }}</h1>
+                  <h2></h2>
                </div>
                <div>
-                  <h2>Username</h2>
-                  <h3>Date of Journey</h3>
+                  <h2>{{session['username']}}</h2>
+                  <h3>{{train_info['date']}}</h3>
                </div>
                
             </div>
@@ -43,12 +43,12 @@
             <div class="ticket-route">
                <h1>From</h1>
                <div class="ticket-source">
-                  <h2>Station</h2>
+                  <h2>{{train_info['source']}}</h2>
                   <h3>Time</h3>
                </div>
                <h1>To</h1>
                <div class="ticket-destination">
-                  <h2>Station</h2>
+                  <h2>{{train_info['destination']}}</h2>
                   <h3>Time</h3>
                </div>
             </div>
@@ -57,21 +57,25 @@
                
                <h1>Name</h1>
                <h2>Age</h2>
+               <h2>Gender</h2>
                <h2>Class</h2>
                <h2>Seat No.</h2>
                <h2>Coach No.</h2>
                <h2>PNR</h2>
          </div>
+         {% for passenger in passengers %} 
          <div class="ticket-details">
-               
-            <h2>Name</h2>
-            <h3>Age</h3>
-            <h3>Class</h3>
+         
+            <h2>{{passenger[0]}}</h2>
+            <h3>{{passenger[1]}}</h3>
+            <h3>{{passenger[2]}}</h3>
+            <h3>{{train_info['class']}}</h3>
             <h3>Seat No.</h3>
             <h3>Coach No.</h3>
-            <h3>PNR</h3>
-      </div>
+            <h3>{{passenger[3]}}</h3>
          </div>
+         {% endfor %}
+      </div>
 
 
          <div class="">
