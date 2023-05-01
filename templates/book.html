@@ -31,11 +31,12 @@
             <div class="ticket-head">
                <div>
                   <h1>{{ train_info['train_no'] }}</h1>
-                  <h2></h2>
+                  <h2>{{ train_info['train_name']}}</h2>
+                  <h2>Journey Date : {{train_info['date']}}</h2>
                </div>
                <div>
                   <h2>{{session['username']}}</h2>
-                  <h3>{{train_info['date']}}</h3>
+                  <h3>{{train_info['booking_time']}}</h3>
                </div>
                
             </div>
@@ -44,12 +45,14 @@
                <h1>From</h1>
                <div class="ticket-source">
                   <h2>{{train_info['source']}}</h2>
-                  <h3>Time</h3>
+                  <h3>{{train_info['src-stn-name']}}</h3>
+                  <h3>{{train_info['src-stn-arr']}} - {{train_info['src-stn-dep']}}</h3>
                </div>
                <h1>To</h1>
                <div class="ticket-destination">
                   <h2>{{train_info['destination']}}</h2>
-                  <h3>Time</h3>
+                  <h3>{{train_info['dest-stn-name']}}</h3>
+                  <h3>{{train_info['src-stn-arr']}} - {{train_info['src-stn-dep']}}</h3>
                </div>
             </div>
 
@@ -70,8 +73,8 @@
             <h3>{{passenger[1]}}</h3>
             <h3>{{passenger[2]}}</h3>
             <h3>{{train_info['class']}}</h3>
-            <h3>Seat No.</h3>
-            <h3>Coach No.</h3>
+            <h3>{{passenger[4]}}</h3>
+            <h3>{{passenger[5]}}</h3>
             <h3>{{passenger[3]}}</h3>
          </div>
          {% endfor %}

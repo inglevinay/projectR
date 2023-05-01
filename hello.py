@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, make_response, session, redirect, url_for, flash, jsonify
 from dotenv import dotenv_values
-import os, psycopg2
+import os, psycopg2, datetime
 
 app = Flask(__name__)
 app.secret_key = "Vinay"
@@ -38,6 +38,7 @@ def getAdminConn(username, password):
          password=password
       )
 
+
 def getConn():
    return psycopg2.connect(
    host=config["HOST"],
@@ -45,13 +46,20 @@ def getConn():
    user=config["USER"],
    password=config["PASSWORD"])
 
-def getAdminConn(username, password):
+def getDefConn():
    return psycopg2.connect(
-      host=config["HOST"],
-      database=config["DATABASE"],
-      user=username,
-      password=password
-   )
+   host=config["HOST"],
+   database=config["DATABASE"],
+   user=config["DEFAULT_USER"],
+   password=config["DEFAULT_PASSWORD"])
+
+# def getAdminConn(username, password):
+#    return psycopg2.connect(
+#       host=config["HOST"],
+#       database=config["DATABASE"],
+#       user=username,
+#       password=password
+#    )
 
 # -----------------------debug-----------------------
 # cur.execute("select * from login")
@@ -74,7 +82,8 @@ def index():
    updateLoginStatus()
 
    print(islogged)
-   conn = getConn()
+
+   conn = getDefConn()
    cur = conn.cursor()
    cur.execute("select * from station;")
    stations = cur.fetchall()
@@ -82,6 +91,7 @@ def index():
    classes = cur.fetchall()
    cur.close()
    conn.close()
+  
    # if request.method == 'POST':
    #    # print(request.form["source"], request.form["destination"], request.form["date"], request.form["class"])
    #    if 'train' in session:
@@ -96,7 +106,7 @@ def login():
       
    if request.method == 'POST':
 
-      conn = getConn()
+      conn = getDefConn()
       cur = conn.cursor()
       print(request.form, request.form['username'])
       cur.execute("select * from checklogin('{}', '{}')".format(request.form['username'], request.form['password']))
@@ -162,7 +172,7 @@ def signup():
 def pnr_number():
    pnr_number = []
    if request.method == 'POST':
-      conn = getConn()
+      conn = getDefConn()
       cur = conn.cursor()
       cur.execute("select train_id, seat_no, src_station, dest_station \
                   from reserves inner join ticket using (ticket_id) \
@@ -181,7 +191,7 @@ def schedule():
    all_trains = []
    if request.method == 'POST':
       try:
-         conn = getConn()
+         conn = getDefConn()
          cur = conn.cursor()
          cur.execute("select * from train_schedule({})".format(request.form['train_no']))
          train_no = request.form['train_no']
@@ -194,7 +204,7 @@ def schedule():
          return redirect(url_for('index'))
       
    try:
-      conn = getConn()
+      conn = getDefConn()
       cur = conn.cursor()
       cur.execute("select * from train;")
       all_trains = cur.fetchall()
@@ -211,7 +221,7 @@ def trains():
    trains = []
    if request.method == 'POST':
       try:
-         conn = getConn()
+         conn = getDefConn()
          cur = conn.cursor()
          cur.execute("select * from train_class")
          classes = cur.fetchall()
@@ -229,7 +239,7 @@ def trains():
 
             for c in classes:
                if c[0] != request.form['class']:
-                  conn = getConn()
+                  conn = getDefConn()
                   cur = conn.cursor()
                   cur.execute("select * from calc_fare({}, '{}', '{}', '{}')".format(td[0], c[0], td[1], td[3]))
                   fare = cur.fetchone()
@@ -286,6 +296,28 @@ def book():
          conn = getConn()
          cur = conn.cursor()
 
+         cur.execute('''select arrival, departure, station_name from route 
+                        join station on (route.station_id = station.station_id) 
+                        where station.station_code = '{}' and train_id = {}'''.format(Dict['source'], Dict['train_no']))
+         src_stn_details = cur.fetchone()
+         print("src : ", src_stn_details)
+         cur.execute('''select arrival, departure, station_name from route 
+                        join station on (route.station_id = station.station_id) 
+                        where station.station_code = '{}' and train_id = {}'''.format(Dict['destination'], Dict['train_no']))
+         dest_stn_details = cur.fetchone()
+         cur.execute("select train_name from train where train_id = {}".format(Dict['train_no']))
+         train_name = cur.fetchone()
+         booking_time = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+         Dict['src-stn-arr'] = src_stn_details[0]
+         Dict['src-stn-dep'] = src_stn_details[1]
+         Dict['src-stn-name'] = src_stn_details[2]
+         Dict['dest-stn-arr'] = dest_stn_details[0]
+         Dict['dest-stn-dep'] = dest_stn_details[1]
+         Dict['dest-stn-name'] = dest_stn_details[2]
+         Dict['booking_time'] = booking_time
+         Dict['train_name'] = train_name[0]
+         
+         print("dest : ", dest_stn_details)
          cur.execute("select user_id from user_table where user_table.username = '{}'".format( session['username']))
          user_id = cur.fetchone()[0]
 
@@ -298,9 +330,23 @@ def book():
             print (index+1, 'name-'+str(index+1), request.form['name-'+str(index+1)])
             cur.execute("select create_ticket({},{},'{}','{}','{}',{},'{}','{}','{}')".format( user_id, Dict['train_no'], Dict['source'], Dict['destination'],request.form['name-'+str(index+1)], request.form['age-'+str(index+1)], request.form['sex-'+str(index+1)], Dict['class'], Dict['date']))
             data.append(eval(cur.fetchone()[0])[1])
+            cur.execute('''select seat.seat_no, coach_name, coach.class from reserves
+                           join seat on (reserves.seat_id = seat.seat_id) 
+                           join coach_seat on (seat.seat_id = coach_seat.seat_id) 
+                           join coach on (coach.coach_id = coach_seat.coach_id) 
+                           where reserves.pnr = {}'''.format(data[-1]))
+            pnr_details = cur.fetchone()
+            print(pnr_details)
             print(type(data[-1]))
-            passengers.append((request.form['name-'+str(index+1)], request.form['age-'+str(index+1)], request.form['sex-'+str(index+1)], data[-1]))
+            passengers.append((request.form['name-'+str(index+1)], request.form['age-'+str(index+1)], request.form['sex-'+str(index+1)], data[-1], pnr_details[0], pnr_details[1], pnr_details[2]))
+         print(passengers)
+         print(Dict)
          # data = cur.fetchall()
+
+         # ticket = []
+         # for pnr in data:
+         #    cur.execute("select * from ticket_data_view where pnr = {}".format(pnr))
+         #    ticket.append(cur.fetchone())
          print(data)
 
          conn.commit()

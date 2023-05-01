@@ -36,7 +36,7 @@ Begin
 	else
 		/* ticket */
 		/* call ticket_procedure(ticket_id_val, pnr_val, src_val, dest_val, cost_val); */
-		insert into ticket values (ticket_id_val, cost_val, src_val, dest_val, pnr_val);
+		insert into ticket (ticket_id, price, src_station, dest_station, pnr) values (ticket_id_val, cost_val, src_val, dest_val, pnr_val);
 
 		/* reservation */
 -- 		Call reservation_proc(train_id_val, jr_dt_val, class_val, src_val, dest_val, ticket_id_val, pnr_val); 
