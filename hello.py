@@ -125,6 +125,8 @@ def login():
             print(session['train_info'])
             session.pop('train_info', None)
             print(cp_train_info)
+            print(cp_train_info["class"].replace("'", ""))
+            print(cp_train_info["date"])
             return render_template('trains.html', trains = [], islogged = islogged, source = cp_train_info["source"], destination = cp_train_info["destination"], date = cp_train_info["date"], tr_class = cp_train_info["class"].replace("'", ""))
 
          return redirect(url_for('index'))
@@ -160,8 +162,8 @@ def signup():
          conn.close()
 
          flash('New account generation was successful!')
-      except:
-         flash("Account creation failed. Try again!")
+      except Exception as err:
+         flash("Account creation failed. Try again!, Error : {}".format(err))
          
       return redirect(url_for('login'))
    
@@ -200,7 +202,7 @@ def schedule():
          conn.close()
       except Exception as err:
          print(err)
-         flash("Something went wrong, maybe your input!")
+         flash("Something went wrong, maybe your input! Error : {}".format(err))
          return redirect(url_for('index'))
       
    try:
@@ -212,7 +214,7 @@ def schedule():
       conn.close()
    except Exception as err:
       print(err)
-      flash("Something went wrong, maybe your input!")
+      flash("Something went wrong, maybe your input! Error : {}".format(err))
    return render_template('schedule.html', train_no = train_no, route = schedule , islogged = islogged, all_trains = all_trains)
 
 
@@ -276,7 +278,7 @@ def passenger():
          session['train_info'] = train_info
          return redirect(url_for('login'))
 
-   return render_template("passenger.html", islogged = islogged, train_info = train_info)
+   return render_template("passenger.html", islogged = islogged, train_info = train_info, tr_class=train_info['class'])
 
 
 @app.route('/book', methods = ['GET', 'POST'])
@@ -355,7 +357,7 @@ def book():
 
       except Exception as err:
          print (err)
-         flash("Something went wrong, Error : ", err)
+         flash("Something went wrong, Error : {}".format( err))
          return redirect(url_for('index'))
       return render_template("book.html", islogged = islogged, booking_info = booking_info, train_info = Dict, passengers = passengers)
    return redirect(url_for('index'))

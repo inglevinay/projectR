@@ -53,9 +53,14 @@
          <div class="main_username">
             Class <br>
             <select name="class" value="{{tr_class}}">
-               {% for class in classes %}
-               <option value="{{ class[0] }}">{{ class[0]}}</option>
-               {% endfor %}
+                {% if classes|length == 0 %}
+                    <option value="{{ tr_class }}">{{ tr_class}}</option>
+                {% else %}
+                    {% for class in classes %}
+                        <option value="{{ class[0] }}">{{ class[0]}}</option>
+                    {% endfor %}
+                {% endif %}
+
             </select>
         </div>
          <div class="main_button">
